@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-set (PROJECT Arcanoid)
+set (PROJECT Arkanoid)
 
 set ("${PROJECT}_BINARY_DIR" bin)
 set ("${PROJECT}_SOURCE_DIR" src)
@@ -19,10 +19,11 @@ include_directories ("${${PROJECT}_INCLUDE_DIR}")
 
 INCLUDE(FindPkgConfig)
 
-find_package (SDL REQUIRED)
+#find_package (SDL REQUIRED)
 find_package (GLU REQUIRED)
 
-include_directories (${SDL_INCLUDE_DIR})
+include_directories (/usr/include/SDL2/)
+include_directories (/usr/lib/i386-linux-gnu/)
 
 add_executable (
 	${PROJECT}
@@ -31,8 +32,8 @@ add_executable (
 
 target_link_libraries (
 	${PROJECT}
-	${SDL_LIBRARY}
+	game
 	${GLU_LIBRARY}
-#	game
+	SDL2
 )
 

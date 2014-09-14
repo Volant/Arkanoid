@@ -4,16 +4,19 @@ set (EXECUTABLE_OUTPUT_PATH ${${PROJECT}_BINARY_DIR})
 
 INCLUDE(FindPkgConfig)
 
-find_package (SDL REQUIRED)
+#find_package (SDL REQUIRED)
 find_package (GLU REQUIRED)
 
-include_directories (${SDL_INCLUDE_DIR})
+include_directories (/usr/include/SDL2/)
+include_directories (/usr/lib/i386-linux-gnu/)
 
 include_directories ("../${${PROJECT}_INCLUDE_DIR}")
 
 set (SOURCE_LIB
+	arkanoid
+	image
 )
 
-#add_library (game STATIC ${SOURCE_LIB})
+add_library (game STATIC ${SOURCE_LIB})
 
 

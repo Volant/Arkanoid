@@ -1,7 +1,7 @@
 Copyright (c) 2014
 
 
-cd Arcanoid/build<br/>
+cd Arkanoid/build<br/>
 cmake ../ && make<br/>
-./Arcanoid
+./Arkanoid
 

@@ -1,11 +1,13 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
-#include <SDL.h>        // Хидер библиотеки SDL
-#include <GL/gl.h>      // Хидеры OpenGL & glu
+#include <SDL.h>
+#include <GL/gl.h>
 #include <GL/glu.h>
 
-#define	SCREEN_WIDTH	640
-#define SCREEN_HEIGHT	480
+#define	SCREEN_WIDTH	800
+#define SCREEN_HEIGHT	500
+
+#define USE_VIDEO_MODE 1
 
 #endif
