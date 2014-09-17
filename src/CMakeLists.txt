@@ -16,6 +16,8 @@ set (SOURCE_LIB
 	arkanoid
 	image
 	config
+	ball
+	bat
 )
 
 add_library (game STATIC ${SOURCE_LIB})

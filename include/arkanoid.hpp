@@ -3,6 +3,8 @@
 
 #include "image.hpp"
 #include "config.hpp"
+#include "ball.hpp"
+#include "bat.hpp"
 
 class Arkanoid {
 

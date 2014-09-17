@@ -3,6 +3,8 @@
 #include "arkanoid.hpp"
 
 void Arkanoid::draw_level (unsigned level_num) {
+
+    // Draw bricks
     std::map < unsigned, Image > sprites = conf->sprites();
     for (unsigned i = 0; i < conf->lines_count(level_num); i++) {
         for (unsigned j = 0; j < conf->lines(level_num)[i].length(); j++) {
@@ -13,9 +15,10 @@ void Arkanoid::draw_level (unsigned level_num) {
         }
     }
 
-    sprites[1].draw_image (300, 300);
+    // Draw ball
+    sprites[1].draw_image (200, 150);
 
-    sprites[2].draw_image (400, 250);
+    conf->bat()->image()->draw_image (conf->bat()->x(), conf->bat()->y());
 }
 
 void Arkanoid::game_loop () {
@@ -24,8 +27,6 @@ void Arkanoid::game_loop () {
     SDL_Event event;
 
     bool done = false;
-
-    draw_level (0);
 
     while (!done) {
         while (SDL_PollEvent (&event)) {
@@ -36,6 +37,10 @@ void Arkanoid::game_loop () {
                 if (event.key.keysym.sym == SDLK_ESCAPE)
                     //this->game.done = true;
                     done = true;
+                if (event.key.keysym.sym == SDLK_LEFT)
+                    conf->bat()->move_left();
+                if (event.key.keysym.sym == SDLK_RIGHT)
+                    conf->bat()->move_right();
 /*
             } else if (this->can_play ()) {
                 human_move = this->check_mouse_click (event);
@@ -44,6 +49,10 @@ void Arkanoid::game_loop () {
 */
             }
         }
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        draw_level (0);
+
 /*
         if (human_move && this->can_play ()) {
 
@@ -82,4 +91,5 @@ Arkanoid::Arkanoid (SDL_Window *sdlWindow) {
 };
 
 Arkanoid::~Arkanoid () {
+    delete conf;
 };

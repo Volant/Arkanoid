@@ -1,5 +1,9 @@
 #include "config.hpp"
 
+Bat* Config::bat () {
+	return &__bat;
+}
+
 std::map < unsigned, Image > Config::sprites () {
 	return images;
 }

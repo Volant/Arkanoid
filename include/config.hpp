@@ -3,6 +3,7 @@
 
 #include "util.h"
 #include "image.hpp"
+#include "bat.hpp"
 
 #include <stdio.h>
 #include <yaml-cpp/yaml.h>
@@ -28,6 +29,8 @@ private:
 	std::map < unsigned, Image > images;
 	unsigned images_count;
 
+	Bat __bat;
+
 public:
 	Config ();
 	~Config ();
@@ -36,7 +39,7 @@ public:
 	unsigned sprites_count (unsigned);
 	string* lines (unsigned);
 	std::map < unsigned, Image > sprites ();
-
+	Bat* bat();
 };
 
 #endif
