@@ -19,7 +19,7 @@ Image::Image () {
 }
 
 Image::~Image () {
-	free (this->image_data);
+//	free (this->image_data);
 }
 
 int Image::load_BMP (string file_name) {
@@ -44,6 +44,15 @@ int Image::load_BMP (string file_name) {
 		dib_header = (unsigned char *) malloc (dib_header_size);
 		switch (dib_header_size) {
 			case BITMAPINFOHEADER:
+				fread (dib_header, dib_header_size, 1, f);
+				this->width = (int (dib_header[3]) << 24) + (int (dib_header[2]) << 16) + (int (dib_header[1]) << 8) + int (dib_header[0]);
+				this->height = (int (dib_header[7]) << 24) + (int (dib_header[6]) << 16) + (int (dib_header[5]) << 8) + int (dib_header[4]);
+				this->bpp = (int (dib_header[11]) << 8) + int (dib_header[10]);
+				this->compression_method = (int (dib_header[15]) << 24) + (int (dib_header[14]) << 16) + (int (dib_header[13]) << 8) + int (dib_header[12]);
+				this->image_size = (int (dib_header[19]) << 24) + (int (dib_header[18]) << 16) + (int (dib_header[17]) << 8) + int (dib_header[16]);
+				color_table_size = (int (dib_header[35]) << 24) + (int (dib_header[34]) << 16) + (int (dib_header[33]) << 8) + int (dib_header[32]);
+				break;
+			case BITMAPV3INFOHEADER:
 				fread (dib_header, dib_header_size, 1, f);
 				this->width = (int (dib_header[3]) << 24) + (int (dib_header[2]) << 16) + (int (dib_header[1]) << 8) + int (dib_header[0]);
 				this->height = (int (dib_header[7]) << 24) + (int (dib_header[6]) << 16) + (int (dib_header[5]) << 8) + int (dib_header[4]);
@@ -82,7 +91,6 @@ int Image::load_BMP (string file_name) {
 				unsigned int a, b;
 				a = (row[i] & 0xF0) >> 4;
 				b =  row[i] & 0x0F;
-
 
 				// color table was read manually. will not implemented in code 
 				// in nearest future because I plan to use PNG images
@@ -142,6 +150,16 @@ int Image::load_BMP (string file_name) {
 
 					if (row_size - i <= 3) break;
 				}
+
+				if (32 == this->bpp) {
+					this->image_data[offset]   = row[i+3];
+					this->image_data[offset+1] = row[i+2];
+					this->image_data[offset+2] = row[i+1];
+					this->image_data[offset+3] = row[i];
+
+					offset += 4;
+					i+=3;
+				}
 			}
 		}
 
@@ -161,8 +179,10 @@ void Image::generate_texture () {
 
 	if (this->bpp == 4) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_RGB, GL_UNSIGNED_BYTE, this->image_data);
-	} else {
+	} else if (this->bpp == 24) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_BGR, GL_UNSIGNED_BYTE, this->image_data);
+	} else if (this->bpp == 32) {
+		glTexImage2D(GL_TEXTURE_2D, 0, 3, this->width, this->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, this->image_data);
 	}
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -177,17 +197,15 @@ void Image::draw_image (int x, int y) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);//_MIPMAP_LINEAR);
 
-
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	x = texture * 100;
 	int coeff = 1;
 
 	glBegin(GL_QUADS);
-	    glTexCoord2d(1,0); glVertex2d (x + this->width * coeff, x + this->height * coeff);
-	    glTexCoord2d(0,0); glVertex2d (x,                   	x + this->height * coeff);
-	    glTexCoord2d(0,1); glVertex2d (x,                   	x);
-	    glTexCoord2d(1,1); glVertex2d (x + this->width * coeff, x);
+	    glTexCoord2d(1,0); glVertex2d (x + this->width * coeff, y + this->height * coeff);
+	    glTexCoord2d(0,0); glVertex2d (x,                   	y + this->height * coeff);
+	    glTexCoord2d(0,1); glVertex2d (x,                   	y);
+	    glTexCoord2d(1,1); glVertex2d (x + this->width * coeff, y);
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
@@ -209,7 +227,6 @@ void Image::load_image (string file_name) {
 
 #if USE_VIDEO_MODE == 1
 		this->generate_texture ();
-		this->draw_image (100, 100);
 #endif 
 
 		fclose (f);

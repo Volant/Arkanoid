@@ -35,5 +35,6 @@ target_link_libraries (
 	game
 	${GLU_LIBRARY}
 	SDL2
+	yaml-cpp
 )
 

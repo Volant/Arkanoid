@@ -2,6 +2,7 @@
 
 #include "arkanoid.hpp"
 #include "image.hpp"
+#include "config.hpp"
 
 int main() {
 
@@ -52,10 +53,7 @@ int main() {
     glLoadIdentity();
 #endif
 
-    Arkanoid engine;
-
-    Image brick_1;
-    brick_1.load_image ("../img/brick_2.bmp");
+    Arkanoid engine (sdlWindow);
 
 #if USE_VIDEO_MODE == 1
     SDL_GL_SwapWindow(sdlWindow);

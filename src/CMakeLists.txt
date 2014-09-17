@@ -15,6 +15,7 @@ include_directories ("../${${PROJECT}_INCLUDE_DIR}")
 set (SOURCE_LIB
 	arkanoid
 	image
+	config
 )
 
 add_library (game STATIC ${SOURCE_LIB})

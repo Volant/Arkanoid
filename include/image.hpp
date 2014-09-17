@@ -14,17 +14,18 @@ public:
 
 private:
 	int file_size;
-	int width;
-	int height;
 	int compression_method;
 	unsigned int image_size;
 
 	unsigned char* image_data;
 	unsigned short* color_table;
 
+public:
 	GLuint texture;
 
-public:
+	int width;
+	int height;
+
 	Image ();
 	~Image ();
 
